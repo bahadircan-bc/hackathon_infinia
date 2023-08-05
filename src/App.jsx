@@ -13,7 +13,7 @@ let NodeJSON = [
     id: id++,
     active: true,
     completed: false,
-    childrenID: [1, 2, 3],
+    childrenID: [1, 2, 3, 4],
     parentID: null,
   },
   {
@@ -29,6 +29,13 @@ let NodeJSON = [
     completed: false,
     childrenID: [],
     parentID: [0, 1],
+  },
+  {
+    id: id++,
+    active: false,
+    completed: false,
+    childrenID: [],
+    parentID: [0],
   },
   {
     id: id++,
@@ -64,7 +71,7 @@ function Node(params) {
             ? "bg-green-500"
             : "bg-red-500"
           : "bg-gray-500"
-      } w-10 aspect-square rounded-full`}
+      } w-10 aspect-square rounded-full flex justify-center items-center`}
       onClick={onClick}
     >
       {params.id}
@@ -104,8 +111,14 @@ function App() {
   }, [rerender]);
 
   return (
-    <div className="grid" onClick={() => setRerender(!rerender)}>
-      {nodes}
+    <div className="flex justify-around items-center w-screen h-screen">
+      <div
+        className="grid w-full h-full justify-items-center items-center m-10"
+        onClick={() => setRerender(!rerender)}
+      >
+        {nodes}
+      </div>
+      <div className="absolute left-0 h-full bg-yellow-500 w-1 z-10"></div>
     </div>
   );
 }
