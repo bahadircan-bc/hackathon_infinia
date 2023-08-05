@@ -15,7 +15,7 @@ let NodeJSON = [
     id: id++,
     active: true,
     completed: false,
-    childrenID: [1, 2, 3, 4],
+    childrenID: [1, 3, 4],
     parentID: null,
   },
   {
@@ -49,7 +49,7 @@ let NodeJSON = [
 ];
 
 function Node(params) {
-  const onClick = () => {
+  const onClick = (e) => {
     if (!params.active) return;
 
     // console.log(NodeJSON[params.id]);
@@ -62,15 +62,20 @@ function Node(params) {
         return NodeJSON[id].completed;
       });
     });
+
+    e.currentTarget.style.left = e.currentTarget.offsetLeft + 'px'
+    e.currentTarget.style.top = e.currentTarget.offsetTop + 'px'
+
+    console.log(e.currentTarget)
   };
 
   return (
     <div
-      style={{ gridColumn: params.col }}
+      style={{ gridColumnStart: params.col, gridRowStart: params.row}}
       className={`${
         params.active
           ? params.completed
-            ? "bg-green-500"
+            ? "bg-green-500 absolute "
             : "bg-red-500"
           : "bg-gray-500"
       } w-10 aspect-square rounded-full flex justify-center items-center`}
@@ -88,11 +93,12 @@ function App() {
   let lastGridPos = [1, 1];
   const [rerender, setRerender] = React.useState(false);
 
-  const buildNodes = (id, col) => {
+  const buildNodes = (id, col, row) => {
     if (nodesBuilt.includes(id)) return;
     const node = NodeJSON.find((node) => node.id === id);
     const nodeObj = (
       <Node
+        row={row}
         col={col}
         key={node.id}
         id={node.id}
@@ -103,7 +109,7 @@ function App() {
     setNodes((nodes) => [...nodes, nodeObj]);
     nodesBuilt.push(id);
     // nodes.push(<Node row={lastGridPos[0]} col={lastGridPos[1]} key={node.id} id={node.id} active={node.active} completed={node.completed}/>);
-    node.childrenID.forEach((id) => buildNodes(id, col + 1));
+    node.childrenID.forEach((id, index) => buildNodes(id, col + 1, index + 1));
   };
 
   useEffect(() => {
@@ -114,18 +120,18 @@ function App() {
 
   const [scope, animate] = useAnimate();
 
-  // useEffect(() => {
-  //   animate(scope.current, {
-  //     width: "0",
-  //     },
-  //     {duration: 10, ease: "linear"})
-  // }, []);
+  useEffect(() => {
+    animate(scope.current, {
+      width: "0",
+      },
+      {duration: 30, ease: "linear"})
+  }, []);
 
   return (
     <div className="flex flex-row-reverse items-center w-screen h-screen">
       <div
       ref={scope}
-        className="grid w-full h-full items-center min-w-min"
+        className="grid grid-cols-[repeat(3,_minmax(40px,1fr))] grid-rows-[repeat(3,1fr)] w-full h-full items-center min-w-min "
         onClick={() => setRerender(!rerender)}
       >
         {nodes}
