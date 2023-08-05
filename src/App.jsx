@@ -7,6 +7,8 @@ import React, {
   useRef,
 } from "react";
 
+import { motio, useAnimate } from "framer-motion";
+
 let id = 0;
 let NodeJSON = [
   {
@@ -110,15 +112,25 @@ function App() {
     // setNodes(NodeJSON.map((node) => {setLastGridPos([lastGridPos[0]+1, lastGridPos[1]+1]) ;return <Node row={lastGridPos[0]} col={lastGridPos[1]} key={node.id} id={node.id} active={node.active} completed={node.completed}/>}));
   }, [rerender]);
 
+  const [scope, animate] = useAnimate();
+
+  useEffect(() => {
+    animate(scope.current, {
+      width: "0",
+      },
+      {duration: 10, ease: "linear"})
+  }, []);
+
   return (
-    <div className="flex justify-around items-center w-screen h-screen">
+    <div className="flex flex-row-reverse items-center w-screen h-screen">
       <div
-        className="grid w-full h-full justify-items-center items-center m-10"
+      ref={scope}
+        className="grid w-full h-full items-center min-w-min"
         onClick={() => setRerender(!rerender)}
       >
         {nodes}
       </div>
-      <div className="absolute left-0 h-full bg-yellow-500 w-1 z-10"></div>
+      <div className="left-0 h-full border-r-2 border-yellow-500 bg-white bg-opacity-25 w-1 z-10"></div>
     </div>
   );
 }
