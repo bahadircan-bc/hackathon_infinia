@@ -114,12 +114,12 @@ function App() {
 
   const [scope, animate] = useAnimate();
 
-  useEffect(() => {
-    animate(scope.current, {
-      width: "0",
-      },
-      {duration: 10, ease: "linear"})
-  }, []);
+  // useEffect(() => {
+  //   animate(scope.current, {
+  //     width: "0",
+  //     },
+  //     {duration: 10, ease: "linear"})
+  // }, []);
 
   return (
     <div className="flex flex-row-reverse items-center w-screen h-screen">
@@ -130,7 +130,7 @@ function App() {
       >
         {nodes}
       </div>
-      <div className="left-0 h-full border-r-2 border-yellow-500 bg-white bg-opacity-25 w-1 z-10"></div>
+      <div className="left-0 h-full border-r-2 border-yellow-500 z-10"></div>
     </div>
   );
 }
